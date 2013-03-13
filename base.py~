@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+#
+# Copyright 2012 Jeremy Pack
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Basic utilities shared across the application.
+
+# System libraries.
+import cgi
+import logging
+import urllib
+import webapp2
+
+# For authentication
+
+#import key
+
+class RequestHandler(webapp2.RequestHandler):
+  """Base class for all of this app's request handlers.
+
+  Currently just like webapp2.RequestHandler, except that it sends response
+  headers to disable caching.
+  """
+
+  def __init__(self, *args, **kwarges):
+    webapp2.RequestHandler.__init__(self, *args, **kwargs)

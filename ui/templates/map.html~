@@ -1,0 +1,6 @@
+<html>
+<body>
+Map
+{{leaflet_map}}
+</body>
+</html>

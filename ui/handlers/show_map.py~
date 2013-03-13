@@ -1,0 +1,27 @@
+#import models.users_db as users_db
+import jinja2
+import os
+import base
+
+from google.appengine.ext.webapp import template
+from workers.get_template_path import get_template_path as get_template_path
+
+
+path = os.path.join(os.path.dirname(__file__))
+path_length = path.__len__()
+
+final_path = path[0:path_length-11] + 'ui/templates/map.html'
+
+leaflet_path = path[0:path_length-11] + 'map/templates/leaflet_map.html'
+#jinja_environment = jinja2.Environment(
+#loader=jinja2.FileSystemLoader(['templates']))
+#template = jinja_environment.get_template(final_path)
+TEMPLATE_URI = 'ui/templates/map.html'
+LEAFLET_TEMPLATE_URL = 'map/templates/leaflet_map.html'
+class ShowMap(base.RequestHandler):
+    def get(self, region):
+        data = {
+            "leaflet_map": template.render(get_template_path(LEAFLET_TEMPLATE_URL), {})
+        }
+        self.response.out.write(template.render(get_template_path(TEMPLATE_URI), data))         
+        
