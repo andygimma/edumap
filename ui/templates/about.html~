@@ -11,10 +11,13 @@ Why are we building an Education Map?
 <p>One thing that can be hard, though, is keeping up with all of it. Especially for those who would be educated, as opposed to those already entrenched in the education world.</p>
 <h3>To that end, we're presenting this education map to the community.</h3>
 <p>This map will endeavor to give the community a single place to find new programs, to find public spaces to start their own programs, and identify people and groups within the community that can help make your education goals attainable.</p>
+<p>We are going to spend the next several weeks engaging the community in NYC to get involved, and send us CSV files to populate our map.</p>
+<p>Please <a href="/contact">contact us</a> with any ideas, with CSV files, or any questions you may have. We want to make this a great tool. We are also on the lookout for developers and designers.</p>
+<p>Thanks for checking out the project!</p>
 {% endblock %}
 
 {% block sidebar_title %}
-Sidebar title
+Open Source Code
 {% endblock %}
 
 
