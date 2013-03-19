@@ -1,5 +1,5 @@
-application: foobar
-version: 1
+application: edumap-alpha1
+version: 87
 runtime: python27
 api_version: 1
 threadsafe: yes
@@ -11,8 +11,50 @@ libraries:
   version: 2.6
 
 handlers:
+- url: /images
+  static_dir: static/images
+  
+- url: /site/css/images
+  static_dir: static/css/images
+  
+- url: /site/css/5grid
+  static_dir: static/css/5grid
+  
+- url: /site/css
+  static_dir: static/css
+  
+- url: /invite/css/images
+  static_dir: static/css/images
+  
+- url: /invite/css/5grid
+  static_dir: static/css/5grid
+  
+- url: /invite/css
+  static_dir: static/css
+  
+- url: /map/css/images
+  static_dir: static/css/images
+  
+- url: /map/css/5grid
+  static_dir: static/css/5grid
+  
+- url: /map/css
+  static_dir: static/css
+  
+- url: /css/images
+  static_dir: static/css/images
+  
+- url: /css/5grid
+  static_dir: static/css/5grid
+  
+- url: /css
+  static_dir: static/css
+  
 - url: /stylesheets
   static_dir: static/css
+  
+- url: /javascript
+  static_dir: static/javascript
   
 - url: /.*
   script: main.app

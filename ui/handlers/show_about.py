@@ -9,5 +9,9 @@ from workers.get_template_path import get_template_path as get_template_path
 TEMPLATE_URI = 'ui/templates/about.html'
 class ShowAbout(base.RequestHandler):
     def get(self):
-        self.response.out.write(template.render(get_template_path(TEMPLATE_URI), {}))         
+        data = {
+	  "about_page_current": True,
+	  "message": self.request.get("message")
+	}
+        self.response.out.write(template.render(get_template_path(TEMPLATE_URI), data))         
         

@@ -1,5 +1,23 @@
-<home>
-<body>
-About Page
-</body>
-</html>
+{% extends "base.html" %}
+
+
+{% block body_title_block %}
+Why are we building an Education Map?
+{% endblock %}
+
+{% block body_content %}
+<p>It's an exciting time. Disruptive ideas are popping up all over the world.</p>
+<p>In the education world, there seem to be new avenues to educate oneself and a community popping up every day. Online learning, new kinds of schools, new education programs with entirely new ways of approaching what education should look like in the 21st century.</p>
+<p>One thing that can be hard, though, is keeping up with all of it. Especially for those who would be educated, as opposed to those already entrenched in the education world.</p>
+<h3>To that end, we're presenting this education map to the community.</h3>
+<p>This map will endeavor to give the community a single place to find new programs, to find public spaces to start their own programs, and identify people and groups within the community that can help make your education goals attainable.</p>
+{% endblock %}
+
+{% block sidebar_title %}
+Sidebar title
+{% endblock %}
+
+
+{% block sidebar_content %}
+Sidebar content
+{% endblock %}

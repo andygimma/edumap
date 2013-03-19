@@ -1,27 +1,26 @@
-#import models.users_db as users_db
 import jinja2
-import os
 import base
 
 from google.appengine.ext.webapp import template
 from workers.get_template_path import get_template_path as get_template_path
+from google.appengine.ext import db
 
 
-path = os.path.join(os.path.dirname(__file__))
-path_length = path.__len__()
-
-final_path = path[0:path_length-11] + 'ui/templates/map.html'
-
-leaflet_path = path[0:path_length-11] + 'map/templates/leaflet_map.html'
-#jinja_environment = jinja2.Environment(
-#loader=jinja2.FileSystemLoader(['templates']))
-#template = jinja_environment.get_template(final_path)
 TEMPLATE_URI = 'ui/templates/map.html'
 LEAFLET_TEMPLATE_URL = 'map/templates/leaflet_map.html'
 class ShowMap(base.RequestHandler):
     def get(self, region):
-        data = {
-            "leaflet_map": template.render(get_template_path(LEAFLET_TEMPLATE_URL), {})
+	age_groups = 'SELECT * From AgeGroup'# WHERE status >= %s", where_string
+	q = db.GqlQuery(gql_string)
+	program_types = 'SELECT * From ProgramType'# WHERE status >= %s", where_string
+	q = db.GqlQuery(gql_string)
+	
+	data = {
+            "leaflet_map": template.render(get_template_path(LEAFLET_TEMPLATE_URL), {}),
+            "map_page_current": True,
+            "message": self.request.get("message"),
+            "age_groups": age_groups,
+            "program_types": program_types,
         }
         self.response.out.write(template.render(get_template_path(TEMPLATE_URI), data))         
         
