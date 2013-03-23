@@ -2,7 +2,7 @@
 
 
 {% block body_title_block %}
-Title
+New York City Map
 {% endblock %}
 
 {% block body_content %}
@@ -18,11 +18,11 @@ Filters
 {% block sidebar_content %}
 <h3>Program Types</h3>
 {% for p in program_types %}
-<h4><a class="filter_button" id="{{p.program_type}}">{{p.program_type}}</a><h4>
+<h4><a class="filter_button" id="program_type" value="{{ p.program_type }}">{{p.program_type}}</a><h4>
 {% endfor %}
 
 <h3>Age Groups</h3>
 {% for a in age_groups %}
-<a class="filter_button" id="{{ a.age_group }}">{{a.age_group}}</a>
+<a class="filter_button" id="age_group" value="{{ a.age_group }}">{{a.age_group}}</a>
 {% endfor %}
 {% endblock %}

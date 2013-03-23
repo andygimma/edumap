@@ -4,6 +4,8 @@ import base
 from google.appengine.ext.webapp import template
 from workers.get_template_path import get_template_path as get_template_path
 from google.appengine.ext import db
+from workers.check_login import check_login
+
 
 
 TEMPLATE_URI = 'ui/templates/map.html'
@@ -23,6 +25,7 @@ class ShowMap(base.RequestHandler):
             "message": self.request.get("message"),
             "age_groups": age_groups,
             "program_types": program_types,
+            "logged_in": check_login(),
         }
         self.response.out.write(template.render(get_template_path(TEMPLATE_URI), data))         
         

@@ -23,6 +23,7 @@ import ui.handlers.show_contact as show_contact
 
 import workers.import_csv as import_csv
 import workers.public_site_ajax_handler as public_site_ajax_handler
+import workers.logout_handler as logout_handler
 
 
 
@@ -56,6 +57,7 @@ app = webapp2.WSGIApplication([
     Route(r'/public_site_ajax_handler', public_site_ajax_handler.PublicSiteAjaxHandler, name='public_site_ajax_handler'),        
     Route(r'/site/<site_id>', show_site.ShowSite, name='show_site'),
     Route(r'/contact', show_contact.ShowContact, name='show_contact'),
+    Route(r'/logout', logout_handler.LogoutHandler, name='logout_handler'),
 
 
     ],

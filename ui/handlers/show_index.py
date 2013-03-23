@@ -7,8 +7,8 @@ from gaesessions import get_current_session
 from workers.get_hash import get_hash
 
 from google.appengine.ext.webapp import template
-from workers.get_template_path import get_template_path as get_template_path
-
+from workers.get_template_path import get_template_path
+from workers.check_login import check_login
 from google.appengine.ext import db
 
 
@@ -23,7 +23,8 @@ class ShowIndex(base.RequestHandler):
         data = {
 	  "show_banner": True,
 	  "home_page_current": True,
-	  "message": self.request.get("message")
+	  "message": self.request.get("message"),
+	  "logged_in": check_login(),
 	}
 	
 	q = db.Query(member_db.Member)

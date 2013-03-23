@@ -129,10 +129,11 @@ $(document).ready(function(){
 									<li {% if home_page_current %} class="current_page_item" {% endif %}><a href="/">Homepage</a></li>
 									<li {% if map_page_current %} class="current_page_item" {% endif %}><a id="map_link" href="/map"></a></li>
 									<li {% if about_page_current %} class="current_page_item" {% endif %}><a id="about_link" href="/about"></a></li>
-									<li {% if blog_page_current %} class="current_page_item" {% endif %}><a id="blog_link" href="/blog"></a></li>
+<!-- 									<li {% if blog_page_current %} class="current_page_item" {% endif %}><a id="blog_link" href="/blog"></a></li> -->
 									<li {% if charts_page_current %} class="current_page_item" {% endif %}><a id="charts_link" href="/charts"></a></li>
 									<li {% if ckan_page_current %} class="current_page_item" {% endif %}><a id="ckan_link" href="/ckan"></a></li>
 									<li {% if contact_page_current %} class="current_page_item" {% endif %}><a id="contact_link" href="/contact">Contact</a></li>
+									{% if logged_in %}<li><a id="logout_link" href="/logout">Logout</a></li>{% else %}<li><a id="login_link" href="/authentication">Login</a></li>{% endif %}
 									<!--<li><a id="eng_us_button"></a></li>
 									<li><a id="sp_button"></a></li>-->
 								</ul>

@@ -1,5 +1,5 @@
-application: edumap-alpha1
-version: 87
+application: educationresourcemap
+version: 5
 runtime: python27
 api_version: 1
 threadsafe: yes
