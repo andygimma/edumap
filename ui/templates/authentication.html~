@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+
+{% block body_title_block %}
+Authentication
+{% endblock %}
+
+{% block body_content %}
+<form action="/authentication" class="form"  method="post">
+<fieldset>
+ {% if form %}      
+    {% if form.email.errors %}
+        <ul class="errors">{% for error in form.email.errors %}<li>Email: {{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+    {% if form.confirm_email.errors %}
+        <ul class="errors">{% for error in form.confirm_email.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+{% endif %}
+<div>
+<label for="email" class="label">Email</label>
+<input type="text" class="input" name="email" />
+</div>
+<br/>
+<div>
+<label for="password" class="label">Password</label>
+<input type="text" class="input" name="password" />
+</div>
+<br/>
+<br/>
+<div>
+{% if destination %}
+<input type="hidden" name="destination" id="destination" value="{{ destination }}" /><br />
+{% endif %}
+<button class="submit_decorator">Autenticate</button>
+</div>
+<br/>
+</fieldset>
+{% endblock %}
+
+{% block sidebar_title %}
+Sidebar title
+{% endblock %}
+
+
+{% block sidebar_content %}
+Sidebar content
+{% endblock %}

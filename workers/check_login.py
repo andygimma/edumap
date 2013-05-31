@@ -1,0 +1,9 @@
+from gaesessions import get_current_session
+def check_login():
+  try:
+    session = get_current_session()
+    session_email = session['email']
+    session_permission_list = session['permissions_list']
+    return True
+  except:
+    return False

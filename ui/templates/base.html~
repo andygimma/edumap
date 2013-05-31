@@ -1,0 +1,221 @@
+<!DOCTYPE HTML>
+<!--
+	Arcana 1.0 by HTML5 Up!
+	html5up.net | @nodethirtythree
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Education Map</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<noscript><link rel="stylesheet" href="css/5grid/core.css" /><link rel="stylesheet" href="css/5grid/core-desktop.css" /><link rel="stylesheet" href="css/5grid/core-1200px.css" /><link rel="stylesheet" href="css/5grid/core-noscript.css" /><link rel="stylesheet" href="css/style.css" /><link rel="stylesheet" href="css/style-desktop.css" /></noscript>
+		<script src="css/5grid/jquery.js"></script>
+	<!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
+<!-- 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>           -->
+		<script type="text/javascript" src="/javascript/jquery.i18n.js"></script>
+		<script type="text/javascript" src="/javascript/cookies.js"></script>
+		<script type="text/javascript" src="/javascript/messi.js"></script>
+		<link rel="stylesheet" href="css/messi.css" />
+
+
+
+
+<script  type="text/javascript">
+$(document).ready(function(){
+// 	____________________________________________________________________________
+// 	Set dicts
+	sp_dict = { 
+		"main_title"  : "Mapa de Educacion",
+		"map_link" : "Mapa",
+		"about_link": "Sobre",
+		"blog_link": "Blog",
+		"charts_link": "Graficos",
+		"ckan_link": "CKAN",
+		"eng_us_button": "Ingles",
+		"sp_button": "Espanol",
+		"contact_button": "Contact",
+		
+	};
+	
+	eng_us_dict = {
+		"main_title"  : "Education Map",
+		"map_link" : "Map",
+		"about_link" : "About",
+		"blog_link": "Blog",
+		"charts_link": "Charts",
+		"ckan_link": "CKAN",
+		"eng_us_button": "English",
+		"sp_button": "Spanish",
+		"contact_button": "Contact",
+	};
+		
+	var id_array=new Array("main_title", "map_link", "about_link", "blog_link", "charts_link", "ckan_link", "eng_us_button", "sp_button", "contact_button");
+	
+	function loadTextArray(id_array) {
+	   for (var i=0; i < id_array.length; i++) {
+	      $('#' + id_array[i]).text($.i18n._(id_array[i]));
+	   }
+	
+	}
+// 	____________________________________________________________________________
+// 	Read Cookie
+	var read = readCookie("lang");
+	if (read == null) {
+	  read = "eng_us";
+	}
+	
+	if (read == "sp") {
+		$.i18n.setDictionary(eng_us_dict);
+		loadTextArray(id_array);
+	}
+	
+	if (read == "eng_us" || read == "null") {
+		$.i18n.setDictionary(eng_us_dict);
+		loadTextArray(id_array);
+	}	
+// 	____________________________________________________________________________
+// 	Button clicks
+	$('#sp_button').click( function(event) {
+		createCookie("lang", "sp", 365);
+		$.i18n.setDictionary(eng_us_dict);
+		loadTextArray(id_array);
+	});
+	
+	$('#eng_us_button').click( function(event) {
+		createCookie("lang", "eng_us", 365);
+		$.i18n.setDictionary(eng_us_dict);
+		loadTextArray(id_array);
+	});
+	
+
+
+});
+</script>
+<script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none&amp;mobileUI.titleBarHeight=60&amp;mobileUI.openerWidth=52"></script>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?sensor=true">
+    </script>
+<!--    <script type="text/javascript">
+      function initialize() {
+        var mapOptions = {
+          center: new google.maps.LatLng(-34.397, 150.644),
+          zoom: 8,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map-canvas"),
+            mapOptions);
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>-->
+    		<script type="text/javascript" src="/javascript/map_clusterer.js"></script>
+		<script type="text/javascript" src="/javascript/map.js"></script>
+</head>
+	<body>
+
+		<!-- Header -->
+
+			<div id="header-wrapper">
+
+				<header class="5grid-layout" id="site-header">
+					<div class="row">
+						<div class="12u">
+							<div class="mobileUI-site-name" id="logo">
+								<h1 id="main_title"></h1>
+							</div>
+							<nav class="mobileUI-site-nav" id="site-nav">
+								<ul>
+									<li {% if home_page_current %} class="current_page_item" {% endif %}><a href="/">Homepage</a></li>
+									<li {% if map_page_current %} class="current_page_item" {% endif %}><a id="map_link" href="/map"></a></li>
+									<li {% if about_page_current %} class="current_page_item" {% endif %}><a id="about_link" href="/about"></a></li>
+<!-- 									<li {% if blog_page_current %} class="current_page_item" {% endif %}><a id="blog_link" href="/blog"></a></li> -->
+									<li {% if charts_page_current %} class="current_page_item" {% endif %}><a id="charts_link" href="/charts"></a></li>
+									<li {% if ckan_page_current %} class="current_page_item" {% endif %}><a id="ckan_link" href="/ckan"></a></li>
+									<li {% if contact_page_current %} class="current_page_item" {% endif %}><a id="contact_link" href="/contact">Contact</a></li>
+									{% if logged_in %}<li><a id="logout_link" href="/logout">Logout</a></li>{% else %}<li><a id="login_link" href="/authentication">Logout</a></li>{% endif %}
+									<!--<li><a id="eng_us_button"></a></li>
+									<li><a id="sp_button"></a></li>-->
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</header>
+			</div>
+
+		<!-- Main -->
+
+		
+			<div id="main-wrapper" class="subpage">
+				<div class="5grid-layout">
+										<div class="row">
+							<div class="12u">
+							{% if show_banner %}
+								<div id="banner">
+									<a href="#"><img src="images/bridge.jpg" alt="" /></a>
+									<div class="caption">
+										<span>An exciting new project to put all of NYCs education resources on an interactive map</span>
+										<br/>
+										<br/>
+										<a href="/about" class="button">Find Out More!</a>
+									</div>
+								</div>
+							{% endif %}
+							</div>
+<!-- 						</div> -->
+					<div class="row">
+						<div class="9u">
+					
+							<!-- Content -->
+
+								<article class="first">
+
+									<h2>{% block body_title_block %}{% endblock %}</h2>
+									{% if message %} <p class="message"><strong>Message: {{ message }}</strong></p> {% endif %}
+									{% block body_content %}{% endblock body_content %}
+
+								</article>							
+
+						</div>
+						<div class="3u">
+						
+							<!-- Sidebar -->
+							
+								<section>
+									<h3>{% block sidebar_title %}{% endblock sidebar_title %}</h3>
+									<ul class="link-list">
+										{% block sidebar_link_list %}
+										{% endblock sidebar_link_list %}
+									</ul>
+									{% block sidebar_content %}
+									{% endblock sidebar_content %}
+								</section>
+
+	
+						
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Footer -->
+
+			<div id="footer-wrapper">
+				<footer class="5grid-layout" id="site-footer">
+					
+					<div class="row">
+						<div class="12u">
+							<div class="divider"></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="12u">
+							<div id="copyright">
+								&copy; Untitled. All rights reserved. | Design: <a href="http://html5up.net">HTML5 Up!</a> | Images: <a href="http://fotogrph.com">Fotogrph</a>
+							</div>
+						</div>
+					</div>
+				</footer>
+			</div>
+
+	</body>
+</html>

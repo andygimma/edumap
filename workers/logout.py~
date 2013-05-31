@@ -1,0 +1,7 @@
+from gaesessions import get_current_session
+
+class PublicSiteAjaxHandler(base.RequestHandler):      
+  def get(self):
+    session = get_current_session()
+    session.clear()
+    self.redirect("/")
