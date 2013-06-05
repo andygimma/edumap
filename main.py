@@ -26,7 +26,9 @@ import workers.public_site_ajax_handler as public_site_ajax_handler
 import workers.logout_handler as logout_handler
 
 
+from google.appengine.ext import webapp
 
+webapp.template.register_template_library('filters.my_filters')
 
 
 

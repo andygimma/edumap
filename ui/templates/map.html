@@ -2,7 +2,7 @@
 
 
 {% block body_title_block %}
-New York City {Map_Type} Map
+New York City Education Map
 {% endblock %}
 
 {% block body_content %}
@@ -11,21 +11,204 @@ New York City {Map_Type} Map
 {% endblock %}
 
 {% block sidebar_title %}
-Map Types
+Filters
 {% endblock %}
 
 
 {% block sidebar_content %}
+<a class="filter_button" id="subject">By Subject</a>
+<div class="program_slide_toggle_box">
+<a class="filter_button_subheader" id="language">Language</a><br/>
+<a class="filter_button_subheader" id="second_language">Second Language</a><br/>
+<a class="filter_button_subheader" id="media">Media</a><br/>
+<a class="filter_button_subheader" id="journalism">Journalism</a><br/>
+<a class="filter_button_subheader" id="music">Music</a><br/>
+<a class="filter_button_subheader" id="art">Art</a><br/>
+<a class="filter_button_subheader" id="dance">Dance</a><br/>
+<a class="filter_button_subheader" id="math">Math</a><br/>
+<a class="filter_button_subheader" id="science">Science</a><br/>
+<a class="filter_button_subheader" id="teaching">Teaching</a><br/>
+<a class="filter_button_subheader" id="religion">Religion</a><br/>
+<a class="filter_button_subheader" id="philosophy">Philosophy</a><br/>
+<a class="filter_button_subheader" id="sociology">Sociology</a><br/>
+<a class="filter_button_subheader" id="urban_studies/urban_development">Urban Studies/Urban Development</a><br/>
+<a class="filter_button_subheader" id="theater">Theater</a><br/>
+<a class="filter_button_subheader" id="business">Business</a><br/>
+<a class="filter_button_subheader" id="architecture">Architecture</a><br/>
+<a class="filter_button_subheader" id="entrepreneurship">Entrepreneurship</a><br/>
+<a class="filter_button_subheader" id="tech_hardware">Tech Hardware</a><br/>
+<a class="filter_button_subheader" id="tech_software">Tech Software</a><br/>
+
+
+
+</div>
+<a class="filter_button" id="age_group">By Age Group</a>
+<div class="age_group_slide_toggle_box">
+<a class="filter_button_subheader" id="pre-k/early_childhood">Pre-D/Early Childhood</a><br/>
+<a class="filter_button_subheader" id="k-5/primary">k-5/Elementary School</a><br/>
+<a class="filter_button_subheader" id="6-8/middle">6-8/Middle School</a><br/>
+<a class="filter_button_subheader" id="9-12/secondary">9-12/High School</a><br/>
+<a class="filter_button_subheader" id="post_secondary">Post Secondary</a><br/>
+<a class="filter_button_subheader" id="lifelong_learning">Lifelong Learning,</a><br/>
+<a class="filter_button_subheader" id="youth_organization">Youth Organization</a><br/>
+<a class="filter_button_subheader" id="after_school_learning">After School</a><br/>
+<a class="filter_button_subheader" id="gap_year_program">Gap Year Program</a><br/>
+<a class="filter_button_subheader" id="camp">Camp</a><br/>
+<a class="filter_button_subheader" id="internship">Internship</a><br/>
+<a class="filter_button_subheader" id="bridge_program">Bridge Program</a><br/>
+</div>
+<script>
+var clusterer=null;
+var global_markers=[];
+var filtered_markers = [];
+
+var still_loading;
+$(function(){
+  $('.program_slide_toggle_box').hide();
+  $('.age_group_slide_toggle_box').hide();
+
+
+    var myLatlng = new google.maps.LatLng(40.714623 ,  -74.006605);
+    var mapOptions = {
+        zoom: 10,
+        center: myLatlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+    
+       var markerCluster = new MarkerClusterer(map);
+    clusterer = markerCluster;
+    my_region = '{{incident}}';
+    populateMapByIncident(my_region, 0, []);
+//     console.log({{incident}});
+    
+
+  
+    $("#subject").click(function () {
+   $('.program_slide_toggle_box').slideToggle();
+         clusterer.addMarkers(filtered_markers);
+
+  });
+  $("#age_group").click(function () {
+   $('.age_group_slide_toggle_box').slideToggle();
+         clusterer.addMarkers(filtered_markers);
+
+  });
+  
+    $("a.filter_button_subheader").click(function(event) {
+    
+
+      var filter_name = event.target.id;
+      var filter = $(this).text();
+      filtered_markers.length = 0;
+
+      if (still_loading != true) {
+	clusterer.clearMarkers();
+	console.log(3);
+	for (var i = 0; i < global_markers.length; i++) {
+	  console.log(global_markers[i].age_group);
+	  console.log(global_markers[i].subject);
+	  if (global_markers[i].age_group == filter_name) {
+	    filtered_markers.push(global_markers[i]);
+
+	  }
+	  
+	  if (global_markers[i].subject == filter_name) {
+	    filtered_markers.push(global_markers[i]);
+	  }
+	}
+	
+      clusterer.addMarkers(filtered_markers);
+      console.log(filtered_markers);
+	// Filter the markers here
+	// var new_markers = [];
+	// filter old markers
+	// add to new markers
+	// clusterer.addMarkers(new_markers);
+	
+      } else {
+	Messi.alert("Please wait until the map is finished loading before using the filters");
+      }
+    });
+})
+function openRequestedPopup(url)
+{
+window.location=url;
+}
+
+
+
+var populateMapByIncident = function(incident, page, old_markers) {
+  still_loading = true;
+  var run_again = false;
+  $.getJSON(
+    "/public_site_ajax_handler",
+    {"shortname" : incident, "page": page},
+    function(sites_list) {
+    if (sites_list.length > 99) {
+      run_again = true;
+    }
+          var mapOptions = {
+    zoom: 8,
+    center: new google.maps.LatLng(40.6501038, -73.8495823),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+//     var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+       var markers = [];
+       var i = 0;
+       for (var i = 0; i < sites_list.length; i++) {
+	 var latLng = new google.maps.LatLng(sites_list[i].latitude, sites_list[i].longitude);
+	 var marker = new google.maps.Marker({'position': latLng, 
+					     'address': sites_list[i].full_address, 
+					      'id': sites_list[i].id,
+					      'age_group': sites_list[i].age_group, 
+					      'contact_number': sites_list[i].contact_number, 
+					      'program': sites_list[i].program, 
+					      'program_type': sites_list[i].program_type, 
+					      'subject': sites_list[i].subject,
+					      'notes': sites_list[i].notes,
+					      'name': sites_list[i].name});
+	 markers.push(marker);
+	google.maps.event.addListener(marker, "click", function() {
+	  new Messi("<p>Program Name:" + this.name + "</p><p>Subject: " + this.subject + "</p><p>Age Group: " + this.age_group + "</p><p>Address: " + this.address + "</p><p>Notes: " + this.notes + "</p>",
+	  {title: this.agency, titleClass: 'info', 
+	  buttons: [
+	  {id: 0, label: 'More Info', val: this.id }, 
+	  {id: 1, label: 'Close', val: 'None'}], callback: function(val) { if (val != "None") {openRequestedPopup("/site/" + val);} }});
+
+	});
+       }
+       
+	var total_markers = old_markers.concat(markers)
+	clusterer.addMarkers(total_markers);
+		 
+// 		 filtered_markers = total_markers;
+		 
+		 
+       $("#display_incident").text("Incident: " + incident);
+
+         if (run_again == true) {
+	    populateMapByIncident(incident, page + 1, total_markers);
+	} else {
+
+	  var total_markers = old_markers.concat(markers);
+	  clusterer.addMarkers(total_markers);
+	  global_markers = global_markers.concat(total_markers);
+	  still_loading=false;
+
+	}
+       
+    }
+  );
+
+}
+</script>
 <!--<h3>Program Types</h3>
 {% for p in program_types %}
 <h4><a class="filter_button" id="program_type" value="{{ p.program_type }}">{{p.program_type}}</a><h4>
 {% endfor %}-->
-<h4><a class="filter_button">Programs</a></h4>
-<h4><a class="filter_button">People</a></h4>
-
-
-<h3>{Map_Type} Filter</h3>
-{% for a in age_groups %}
+<!--<h3>{Map_Type} Filter</h3>-->
+<!--{% for a in age_groups %}
 <a class="filter_button" id="age_group" value="{{ a.age_group }}">{{a.age_group}}</a>
-{% endfor %}
+{% endfor %}-->
 {% endblock %}

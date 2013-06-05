@@ -12,6 +12,9 @@ from collections import OrderedDict
 # Local libraries.
 import base
 from models import site_db as site_db
+from models import program_db
+from models import region_db
+
 
 
 PAGE_OFFSET = 100
@@ -22,21 +25,24 @@ class PublicSiteAjaxHandler(base.RequestHandler):
   def get(self):
     logging.debug("PublicMapAjaxHandler")
     page = self.request.get("page")
+    region = self.request.get("shortname")
     try:
       page_int = int(page)
     except:
       logging.error("int(page)")
       return
-    where_string = "Open"
-    gql_string = 'SELECT * From Site'# WHERE status >= %s", where_string
+    gql_string = 'SELECT * From Program'# WHERE'# region = new_york'# + str(region)
     q = db.GqlQuery(gql_string)
+    q = program_db.Program.all()
+    q.filter("region = ", region)
+    
 
 
     this_offset = page_int * PAGE_OFFSET
     logging.debug("this_offset = " + str(this_offset))
 	
     sites = q.fetch(PAGE_OFFSET, offset = this_offset)
-    self.response.out.write(json.dumps([site_db.toDict(s) for s in sites]))
+    self.response.out.write(json.dumps([program_db.toDict(s) for s in sites]))
 
     return
         

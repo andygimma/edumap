@@ -27,6 +27,7 @@ import workers.logout_handler as logout_handler
 
 
 
+webapp.template.register_template_library('filters.my_filters')
 
 
 
@@ -57,7 +58,7 @@ app = webapp2.WSGIApplication([
     Route(r'/public_site_ajax_handler', public_site_ajax_handler.PublicSiteAjaxHandler, name='public_site_ajax_handler'),        
     Route(r'/site/<site_id>', show_site.ShowSite, name='show_site'),
     Route(r'/contact', show_contact.ShowContact, name='show_contact'),
-    Route(r'/contact', show_contact.ShowContact, name='show_contact'),
+    Route(r'/logout', logout_handler.LogoutHandler, name='logout_handler'),
 
 
     ],

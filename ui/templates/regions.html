@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+
+{% block body_title_block %}
+Regions
+{% endblock %}
+
+{% block body_content %}
+{% for q in regions_list %}
+<p><a href="/map/{{q.name}}">{{ q.name|region_title }}</a></p>
+{% endfor %}
+{% endblock %}
+
+{% block sidebar_title %}
+Sidebar title
+{% endblock %}
+
+
+{% block sidebar_content %}
+Sidebar content
+{% endblock %}

@@ -1,4 +1,4 @@
 PERMISSIONS_DICT = {
-  "1": "Administrator",
-  "2": "Import CSV",
+  "Administrator": "Administrator",
+  "Import CSV": "Import CSV",
 }

@@ -15,6 +15,8 @@ import metaphone
 from models import program_db
 from models import person_db
 from models import location_db
+from models import region_db
+
 
 from google.appengine.api import logservice
 logservice.AUTOFLUSH_ENABLED = False
@@ -26,6 +28,7 @@ class ImportCSV(base.RequestHandler):
 	g = geocoders.GoogleV3()
 	complete = False
 	to_put = []
+	regions_list=[]
 	kind = None
 	for row in cr:
 	  try:
@@ -39,8 +42,7 @@ class ImportCSV(base.RequestHandler):
 	      kind = "People"
 	    except:
 	      kind = None
-	  if kind == None:
-	    kind = "Location"
+
 
 	  
 	  
@@ -56,36 +58,58 @@ class ImportCSV(base.RequestHandler):
 		setattr(p, key, row[key])
 		if key == "name":
 		  name_metaphone = metaphone.dm(unicode(row[key]))
-		  setattr(p, key, str(name_metaphone))
-	    to_put.append(p)
+		  setattr(p, "name_metaphone", str(name_metaphone[0]))
+		if key == "region":
+		  regions_list.append(row[key])
+	    q = program_db.Program.all()
+	    q.filter('latitude = ', float(lat))
+	    q.filter('longitude = ', float(lng))
+	    q.filter('name_metaphone = ', str(name_metaphone[0]))
+
+	    if not q.get():
+	      to_put.append(p)
+	    else:
+	      pass
 	    complete = True
 	      
-	  if kind == "Location":
-	      p = location_db.Location()
+	  #if kind == "Location":
+	      #p = location_db.Location()
 
-	      lat = None
-	      lng = None
-	      address_string = row["address"] + " " + row["city"] + " " + row["state"]
-	      place, (lat, lng) = g.geocode(address_string.lower())
-	      setattr(p, "latitude", float(lat))
-	      setattr(p, "longitude", float(lng))
-	      for key in row.keys():
-		  setattr(p, key, row[key])
-		  if key == "name":
-		    name_metaphone = metaphone.dm(unicode(row[key]))
-		    setattr(p, key, str(name_metaphone))
-	      to_put.append(p)
-	      complete = True
+	      #lat = None
+	      #lng = None
+	      #address_string = row["address"] + " " + row["city"] + " " + row["state"]
+	      #place, (lat, lng) = g.geocode(address_string.lower())
+	      #setattr(p, "latitude", float(lat))
+	      #setattr(p, "longitude", float(lng))
+	      #for key in row.keys():
+		  #setattr(p, key, row[key])
+		  #if key == "name":
+		    #name_metaphone = metaphone.dm(unicode(row[key]))
+		    #setattr(p, key, str(name_metaphone))
+	      #to_put.append(p)
+	      #complete = True
 	      
-	  if kind == "Person":
+	  if kind == "People":
+
 	      p = person_db.Person()
 
 	      for key in row.keys():
 		  setattr(p, key, row[key])
 		  if key == "name":
 		    name_metaphone = metaphone.dm(unicode(row[key]))
-		    setattr(p, key, name_metaphone)
-	      to_put.append(p)
+		    setattr(p, "name_metaphone", str(name_metaphone[0]))
+		  if key == "program":
+		    program_metaphone = metaphone.dm(unicode(row[key]))
+		    setattr(p, "program_metaphone", str(program_metaphone[0]))
+		  if key == "region":
+		    regions_list.append(row[key])
+		    
+	      q = person_db.Person.all()
+	      q.filter('name_metaphone = ', str(name_metaphone[0]))
+	      #q.get()
+
+	      if not q.get():
+		to_put.append(p)
 	      complete = True
 
 
@@ -93,6 +117,20 @@ class ImportCSV(base.RequestHandler):
 	if complete:
 	  final_list = list(set(to_put))
 	  db.put(final_list)
+	  q = region_db.Region.all()
+	  query = q.fetch(1000)
+	  saved_regions_list = []
+	  for q in query:
+	    saved_regions_list.append(q.name)
+	    
+	  final_regions_list = list(set(regions_list))
+	  
+	  to_save_regions = list(set(final_regions_list) - set(saved_regions_list))
+	  
+	  for region in to_save_regions:
+	    r = region_db.Region(name=region)
+	    r.put()
+	  
 	  self.redirect("/import?message=Import complete")
 	  return
   

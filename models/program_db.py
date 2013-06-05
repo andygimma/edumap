@@ -32,16 +32,18 @@ class Program(db.Expando):
     
 def toDict(Program):
   
-  location_dict = {
+  program_dict = {
 	'id': Program.key().id(),
 	'name': Program.name,
 	"contact_number": Program.contact_number,
-	'full_address': Program.full_address,
+	'full_address': Program.address + ' ' + Program.city,
 	'latitude': Program.latitude,
 	'longitude': Program.longitude,
 	'website': Program.website,
 	'notes': Program.notes,
 	'location_name': Program.location_name,
+	'subject': Program.subject,
+	'age_group': Program.age_group,
       }
   
   return program_dict
