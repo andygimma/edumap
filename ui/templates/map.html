@@ -68,9 +68,9 @@ $(function(){
   $('.age_group_slide_toggle_box').hide();
 
 
-    var myLatlng = new google.maps.LatLng(40.714623 ,  -74.006605);
+    var myLatlng = new google.maps.LatLng(39.5, -98.35);
     var mapOptions = {
-        zoom: 10,
+        zoom: 4,
         center: myLatlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
@@ -150,7 +150,7 @@ var populateMapByIncident = function(incident, page, old_markers) {
     }
           var mapOptions = {
     zoom: 8,
-    center: new google.maps.LatLng(40.6501038, -73.8495823),
+    center: new google.maps.LatLng(39.5, -98.35),
     mapTypeId: google.maps.MapTypeId.ROADMAP
     }
 //     var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);

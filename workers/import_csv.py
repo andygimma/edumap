@@ -7,7 +7,7 @@ from models import site_db as site_db
 from models import age_group_db as age_group_db
 from models import program_type_db as program_type_db
 from google.appengine.ext import db
-
+import urllib
 
 from geopy import geocoders  
 import metaphone
@@ -51,20 +51,30 @@ class ImportCSV(base.RequestHandler):
 	    lat = None
 	    lng = None
 	    address_string = row["address"] + " " + row["city"] + " " + row["state"]
-	    place, (lat, lng) = g.geocode(address_string.lower())
+	    try:
+	      place, (lat, lng) = g.geocode(address_string.lower())
+	    except:
+	      continue
+	      #geocodes = g.geocode(address_string.lower())
+	      #raise Exception(geocodes[0])
+	      
 	    setattr(p, "latitude", float(lat))
 	    setattr(p, "longitude", float(lng))
 	    for key in row.keys():
-		setattr(p, key, row[key])
-		if key == "name":
-		  name_metaphone = metaphone.dm(unicode(row[key]))
-		  setattr(p, "name_metaphone", str(name_metaphone[0]))
+	        initial_value = str(row[key])
+	        #new_value = quoted_value = urllib.quote(initial_value.encode('utf-8'))
+	        new_value = unicode(initial_value, 'utf-8')
+
+		setattr(p, key, new_value)
+		#if key == "name":
+		  #name_metaphone = metaphone.dm(unicode(row[key]))
+		  #setattr(p, "name_metaphone", str(name_metaphone[0]))
 		if key == "region":
 		  regions_list.append(row[key])
 	    q = program_db.Program.all()
 	    q.filter('latitude = ', float(lat))
 	    q.filter('longitude = ', float(lng))
-	    q.filter('name_metaphone = ', str(name_metaphone[0]))
+	    #q.filter('name_metaphone = ', str(name_metaphone[0]))
 
 	    if not q.get():
 	      to_put.append(p)
