@@ -2,7 +2,7 @@
 
 
 {% block body_title_block %}
-New York City Education Map
+{% incident %} Map
 {% endblock %}
 
 {% block body_content %}
@@ -70,7 +70,7 @@ $(function(){
 
     var myLatlng = new google.maps.LatLng(39.5, -98.35);
     var mapOptions = {
-        zoom: 10,
+        zoom: 4,
         center: myLatlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
