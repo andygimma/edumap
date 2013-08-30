@@ -2,6 +2,7 @@
 import jinja2
 import os
 import base
+import logging
 import csv, codecs, cStringIO
 from models import site_db as site_db
 from models import age_group_db as age_group_db
@@ -45,42 +46,52 @@ class ImportCSV(base.RequestHandler):
 
 
 	  
-	  
+	  failures_array = []
 	  if kind == "Program":
+	    
 	    p = program_db.Program()
 	    lat = None
 	    lng = None
 	    address_string = row["address"] + " " + row["city"] + " " + row["state"]
 	    try:
-	      place, (lat, lng) = g.geocode(address_string.lower())
-	    except:
-	      continue
-	      #geocodes = g.geocode(address_string.lower())
-	      #raise Exception(geocodes[0])
+	      if len(address_string) > 10:
+		try:
+		  place, (lat, lng) = g.geocode(address_string.lower())
+		  logging.debug(lat)
+		  logging.debug(lng)
+		  logging.debug(place)
+		except:
+		  failures_array.append(address_string)
+		  continue
+		  #geocodes = g.geocode(address_string.lower())
+		  #raise Exception(geocodes[0])
 	      
-	    setattr(p, "latitude", float(lat))
-	    setattr(p, "longitude", float(lng))
-	    for key in row.keys():
-	        initial_value = str(row[key])
-	        #new_value = quoted_value = urllib.quote(initial_value.encode('utf-8'))
-	        new_value = unicode(initial_value, 'utf-8')
+	      setattr(p, "latitude", float(lat))
+	      setattr(p, "longitude", float(lng))
+	      for key in row.keys():
+		  initial_value = str(row[key])
+		  #new_value = quoted_value = urllib.quote(initial_value.encode('utf-8'))
+		  new_value = unicode(initial_value, 'utf-8')
 
-		setattr(p, key, new_value)
-		#if key == "name":
-		  #name_metaphone = metaphone.dm(unicode(row[key]))
-		  #setattr(p, "name_metaphone", str(name_metaphone[0]))
-		if key == "region":
-		  regions_list.append(row[key])
-	    q = program_db.Program.all()
-	    q.filter('latitude = ', float(lat))
-	    q.filter('longitude = ', float(lng))
-	    #q.filter('name_metaphone = ', str(name_metaphone[0]))
+		  setattr(p, key, new_value)
+		  #if key == "name":
+		    #name_metaphone = metaphone.dm(unicode(row[key]))
+		    #setattr(p, "name_metaphone", str(name_metaphone[0]))
+		  if key == "region":
+		    regions_list.append(row[key])
+	      q = program_db.Program.all()
+	      q.filter('latitude = ', float(lat))
+	      q.filter('longitude = ', float(lng))
+	      #q.filter('name_metaphone = ', str(name_metaphone[0]))
 
-	    if not q.get():
-	      to_put.append(p)
-	    else:
-	      pass
-	    complete = True
+	      if not q.get():
+		to_put.append(p)
+	      else:
+		pass
+	      complete = True
+	    except:
+	      failures_array.append(address_string)
+	      continue
 	      
 	  #if kind == "Location":
 	      #p = location_db.Location()
@@ -140,10 +151,10 @@ class ImportCSV(base.RequestHandler):
 	  for region in to_save_regions:
 	    r = region_db.Region(name=region)
 	    r.put()
-	  
-	  self.redirect("/import?message=Import complete")
+	  self.response.write(failures_array)
+
+	  #self.redirect("/import?message=Import complete")
 	  return
-  
 	self.redirect("/import?message=Nothing Uploaded, the CSV was not valid") 
 	return
 	  
